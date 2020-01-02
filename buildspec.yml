@@ -6,7 +6,7 @@ env:
     CACHE_DIR: /home/ubuntu/cache
     ROBOT_WS: robot_ws
     SIMULATION_WS: simulation_ws
-    ROS_VERSION: melodic
+    ROS_VERSION: kinetic
     LAMBDA_EVENT_JSON: batchSim.json
 phases: 
   install: 
