@@ -9,7 +9,8 @@ env:
     ROS_VERSION: kinetic
     LAMBDA_EVENT_JSON: batchSim.json
 phases: 
-# If using ECR, you do not need the install step. 
+# If using ECR, you do not need the install step.
+# Extra commit.
 #  install: 
 #    commands: 
 #       - apt-get update
