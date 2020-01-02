@@ -1,11 +1,13 @@
 version: 0.2 
 env:
   variables:
-    S3_BUCKET: awsrobomakercloudwatch-156053481370-bundlesbucket-q58eu3to98id
-    APP_NAME: cloudwatch
-    ROBOT_WS: ./robot_ws
-    SIMULATION_WS: ./simulation_ws
-    ROS_VERSION: kinetic
+    S3_BUCKET: batch-simulations-scenarios-s3bucket-3xx75u3cslfd
+    APP_NAME: cicd
+    CACHE_DIR: /home/ubuntu/cache
+    ROBOT_WS: robot_ws
+    SIMULATION_WS: simulation_ws
+    ROS_VERSION: melodic
+    LAMBDA_EVENT_JSON: batchSim.json
 phases: 
   install: 
     commands: 
@@ -20,20 +22,25 @@ phases:
        - pip3 install awscli
   pre_build:
     commands:
+      - mkdir -p $CACHE_DIR/$ROBOT_WS
+      - mkdir -p $CACHE_DIR/$SIMULATION_WS
       - . /opt/ros/$ROS_VERSION/setup.sh
       - rosdep update
-      - rosws update --target-workspace $ROBOT_WS
-      - rosdep install --from-paths $ROBOT_WS/src --ignore-src -r -y
-      - rosws update --target-workspace $SIMULATION_WS
-      - rosdep install --from-paths $SIMULATION_WS/src --ignore-src -r -y
+      - rosws update --target-workspace ./$ROBOT_WS
+      - rosdep install --from-paths ./$ROBOT_WS/src --ignore-src -r -y
+      - rosws update --target-workspace ./$SIMULATION_WS
+      - rosdep install --from-paths ./$SIMULATION_WS/src --ignore-src -r -y
   build: 
     commands: 
-      - COLCON_LOG_PATH="$ROBOT_WS/logs" colcon build --base-paths "$ROBOT_WS" --build-base "$ROBOT_WS/build" --install-base "$ROBOT_WS/install"
-      - COLCON_LOG_PATH="$SIMULATION_WS/logs" colcon build --base-paths "$SIMULATION_WS" --build-base "$SIMULATION_WS/build" --install-base "$SIMULATION_WS/install"
+      - COLCON_LOG_PATH="$CACHE_DIR/$ROBOT_WS/logs" colcon build --base-paths "./$ROBOT_WS" --build-base "$CACHE_DIR/$ROBOT_WS/build" --install-base "$CACHE_DIR/$ROBOT_WS/install"
+      - COLCON_LOG_PATH="$CACHE_DIR/$SIMULATION_WS/logs" colcon build --base-paths "./$SIMULATION_WS" --build-base "$CACHE_DIR/$SIMULATION_WS/build" --install-base "$CACHE_DIR/$SIMULATION_WS/install"
   post_build: 
     commands: 
-      - COLCON_LOG_PATH="$ROBOT_WS/logs" colcon bundle --base-paths "$ROBOT_WS" --build-base "$ROBOT_WS/build" --install-base "$ROBOT_WS/install" --bundle-base "$ROBOT_WS/bundle"
-      - COLCON_LOG_PATH="$SIMULATION_WS/logs" colcon bundle --base-paths "$SIMULATION_WS" --build-base "$SIMULATION_WS/build" --install-base "$SIMULATION_WS/install" --bundle-base "$SIMULATION_WS/bundle"
-      - aws s3 cp $ROBOT_WS/bundle/output.tar s3://$S3_BUCKET/cloudwatch-robot.tar
-      - aws s3 cp $SIMULATION_WS/bundle/output.tar s3://$S3_BUCKET/cloudwatch-simulation.tar
-      - aws lambda invoke --function-name batch-simulations-scenarios-batchsimulations-8XFPSKEKYPJK --payload '{"wait":5,"scenarios":{"QuickNav":{"robotEnvironmentVariables":{"ROS_AWS_REGION":"us-west-2"},"simEnvironmentVariables":{"ROS_AWS_REGION":"us-west-2","TURTLEBOT3_MODEL":"waffle_pi","NAVIGATION_SUCCESS_COUNT":"1"}},"MultiNav":{"robotEnvironmentVariables":{"ROS_AWS_REGION":"us-west-2"},"simEnvironmentVariables":{"ROS_AWS_REGION":"us-west-2","TURTLEBOT3_MODEL":"waffle_pi","NAVIGATION_SUCCESS_COUNT":"2"}}},"simulations":[{"scenarios":["QuickNav","MultiNav"],"params":{"failureBehavior":"Fail","iamRole":"arn:aws:iam::707829246062:role/AWSRoboMakerCloudWatch-156053481-SimulationJobRole-1RC1E7146UHCN","maxJobDurationInSeconds":600,"outputLocation":{"s3Bucket":"awsrobomakercloudwatch-156053481370-bundlesbucket-q58eu3to98id","s3Prefix":"output"},"robotApplications":[{"application":"arn:aws:robomaker:us-west-2:707829246062:robot-application/AWSRoboMakerCloudWatch-1560534813707_Vhf_ElhOQ/1560534912786","applicationVersion":"$LATEST","launchConfig":{"launchFile":"await_commands.launch","packageName":"cloudwatch_robot"}}],"simulationApplications":[{"application":"arn:aws:robomaker:us-west-2:707829246062:simulation-application/AWSRoboMakerCloudWatch-1560534813707_GafQpP1TC/1560534919751","applicationVersion":"$LATEST","launchConfig":{"launchFile":"bookstore_turtlebot_navigation.launch","packageName":"cloudwatch_simulation"}}],"vpcConfig":{"assignPublicIp":true,"securityGroups":["sg-a91fddd1"],"subnets":["subnet-b80cc7df","subnet-4ec62b07","subnet-b0df89e8"]}}}]}' output.txt
+      - COLCON_LOG_PATH="$CACHE_DIR/$ROBOT_WS/logs" colcon bundle --base-paths "./$ROBOT_WS" --build-base "$CACHE_DIR/$ROBOT_WS/build" --install-base "$CACHE_DIR/$ROBOT_WS/install" --bundle-base "$CACHE_DIR/$ROBOT_WS/bundle"
+      - COLCON_LOG_PATH="$CACHE_DIR/$SIMULATION_WS/logs" colcon bundle --base-paths "./$SIMULATION_WS" --build-base "$CACHE_DIR/$SIMULATION_WS/build" --install-base "$CACHE_DIR/$SIMULATION_WS/install" --bundle-base "$CACHE_DIR/$SIMULATION_WS/bundle"
+      - aws s3 cp $CACHE_DIR/$ROBOT_WS/bundle/output.tar s3://$S3_BUCKET/cloudwatch-robot.tar
+      - aws s3 cp $CACHE_DIR/$SIMULATION_WS/bundle/output.tar s3://$S3_BUCKET/cloudwatch-simulation.tar
+      - aws lambda invoke --function-name batch-simulations-scenarios-batchsimulations-CG69KSCRH8GY --payload file://$LAMBDA_EVENT_JSON out.txt
+cache:
+  paths:
+    - '/home/ubuntu/cache/**/*'
