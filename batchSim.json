@@ -47,7 +47,12 @@
 	    }
 	},
 	"simulations": [{
-		"scenarios": ["QuickNav", "MultiNav"],
+		"scenarios": [
+	        "QuickNavSmallHouse",
+	        "MultiNavSmallHouse",
+	        "QuickNavBookStore",
+	        "MultiNavBookStore"
+	      ],
 		"params": {
 			"failureBehavior": "Fail",
 			"iamRole": "arn:aws:iam::461812446130:role/robomaker-simulation-role-ap-southeast-1",
