@@ -41,7 +41,7 @@
 				}
 			}],
 			"simulationApplications": [{
-				"application": "arn:aws:robomaker:ap-southeast-1:461812446130:simulation-application/SimulationApplication-QvuW8sNXbuX3/1578000927919",
+				"application": "arn:aws:robomaker:ap-southeast-1:461812446130:simulation-application/SimulationApplication-mVZMuqNHzXK4/1578080330268",
 				"applicationVersion": "$LATEST",
 				"launchConfig": {
                     "packageName": "cloudwatch_simulation",
