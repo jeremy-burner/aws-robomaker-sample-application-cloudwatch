@@ -3,7 +3,7 @@ env:
   variables:
     S3_BUCKET: batch-simulations-scenarios-s3bucket-3xx75u3cslfd
     APP_NAME: cicd
-    CACHE_DIR: /home/ubuntu/cache
+    CACHE_DIR: cache
     ROBOT_WS: robot_ws
     SIMULATION_WS: simulation_ws
     ROS_VERSION: kinetic
@@ -32,7 +32,7 @@ phases:
       - rosdep install --from-paths ./$ROBOT_WS/src --ignore-src -r -y
       - rosws update --target-workspace ./$SIMULATION_WS
       - rosdep install --from-paths ./$SIMULATION_WS/src --ignore-src -r -y
-      - ls /home/ubuntu/cache
+      - ls cache
   build: 
     commands: 
       - COLCON_LOG_PATH="$CACHE_DIR/$ROBOT_WS/logs" colcon build --base-paths "./$ROBOT_WS" --build-base "$CACHE_DIR/$ROBOT_WS/build" --install-base "$CACHE_DIR/$ROBOT_WS/install"
@@ -46,5 +46,5 @@ phases:
       - aws lambda invoke --function-name batch-simulations-scenarios-batchsimulations-CG69KSCRH8GY --payload file://$LAMBDA_EVENT_JSON out.txt
 cache:
   paths:
-    - '/home/ubuntu/cache/**/*'
+    - 'cache/**/*'
     
