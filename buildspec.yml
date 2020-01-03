@@ -45,6 +45,6 @@ phases:
 cache:
   paths:
     - 'cache/**/*'
-    - '$ROBOT_WS/src/deps/**/*'
-    - '$SIMULATION_WS/src/deps/**/*'
+    - 'robot_ws/src/deps/**/*'
+    - 'simulation_ws/src/deps/**/*'
     
