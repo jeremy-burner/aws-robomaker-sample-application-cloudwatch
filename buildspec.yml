@@ -26,6 +26,8 @@ phases:
 #       - mkdir -p $CACHE_DIR/$SIMULATION_WS
   pre_build:
     commands:
+      - ls $CACHE_DIR/$ROBOT_WS
+      - ls $CACHE_DIR/$SIMULATION_WS
       - . /opt/ros/$ROS_VERSION/setup.sh
       - rosdep update
       - rosws update --target-workspace ./$ROBOT_WS
@@ -46,3 +48,6 @@ phases:
 cache:
   paths:
     - '/home/ubuntu/cache/**/*'
+    - '$CODEBUILD_SRC_DIR/$ROBOT_WS/src/deps'
+    - '$CODEBUILD_SRC_DIR/$SIMULATION_WS/src/deps'
+    
