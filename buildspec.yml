@@ -10,7 +10,7 @@ env:
     LAMBDA_EVENT_JSON: batchSim.json
 phases: 
 # If using ECR, you do not need the install step.
-# Extra commit.
+# Extra commit, testing.
 #  install: 
 #    commands: 
 #       - apt-get update
