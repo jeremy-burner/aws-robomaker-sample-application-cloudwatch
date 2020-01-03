@@ -48,5 +48,4 @@ cache:
     - 'cache/**/*'
     - '$ROBOT_WS/src/deps/**/*'
     - '$SIMULATION_WS/src/deps/**/*'
-    - '/opt/ros/kinetic/**/*'
     
