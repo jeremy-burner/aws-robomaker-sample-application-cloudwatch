@@ -173,5 +173,3 @@ MIT-0 - See LICENSE.txt for further information
 ## How to Contribute
 
 Create issues and pull requests against this Repository on Github
-
-

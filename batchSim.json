@@ -44,8 +44,8 @@
 				"application": "arn:aws:robomaker:ap-southeast-1:461812446130:simulation-application/SimulationApplication-QvuW8sNXbuX3/1578000927919",
 				"applicationVersion": "$LATEST",
 				"launchConfig": {
-					"launchFile": "bookstore_turtlebot_navigation.launch",
-					"packageName": "cloudwatch_simulation"
+                    "packageName": "cloudwatch_simulation",
+                    "launchFile": "bookstore_turtlebot_navigation.launch",
 				}
 			}],
 			"vpcConfig": {
