@@ -45,7 +45,7 @@
 				"applicationVersion": "$LATEST",
 				"launchConfig": {
                     "packageName": "cloudwatch_simulation",
-                    "launchFile": "bookstore_turtlebot_navigation.launch",
+                    "launchFile": "bookstore_turtlebot_navigation.launch"
 				}
 			}],
 			"vpcConfig": {
