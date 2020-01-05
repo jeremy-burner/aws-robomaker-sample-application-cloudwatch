@@ -41,7 +41,7 @@
 	      "simEnvironmentVariables": {
 	        "ROS_AWS_REGION": "ap-southeast-1",
 	        "TURTLEBOT3_MODEL": "waffle_pi",
-	        "NAVIGATION_SUCCESS_COUNT": "5",
+	        "NAVIGATION_SUCCESS_COUNT": "6",
 	        "SIMULATION_WORLD": "small_house"
 	      }
 	    }
