@@ -69,7 +69,7 @@
             "environmentVariables": {
               "ROS_AWS_REGION": "ap-southeast-1",
               "TURTLEBOT3_MODEL": "waffle_pi",
-              "NAVIGATION_SUCCESS_COUNT": "2"
+              "NAVIGATION_SUCCESS_COUNT": "3"
             }
           },
           "robotSoftwareSuite": {
